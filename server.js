@@ -1,15 +1,44 @@
 const http = require('node:http')
+const fs = require('fs')
 
 const server = http.createServer((req,res) =>{
-    
+    let path = './pages/'
     // ^ Header writing can be this
         // * res.statusCode = 200;
         //* res.setHeader('Content-Type', 'text/plain')
     // ^ OR 
-    res.writeHead(200, {'Content-Type': 'text/plain'})
-    console.log(req.url)
+    res.writeHead(200, {'Content-Type': 'text/html'})
 
-    res.end('Hello World!')
+    switch (req.url){
+        case '/': 
+            path += 'home.html'
+            break;
+        case '/about':
+            path += 'about.html';
+            break;
+        case '/contact':
+            path += 'contact-me.html'
+            break;
+        default: 
+            path += '404.html'
+            break;
+
+    }
+
+    fs.readFile(path, (err,data) => {
+
+        if(err){
+            throw err;
+        }else{
+            res.write(data)
+            res.end()
+
+        }
+
+    })
+
+
+    
    
 })
 
